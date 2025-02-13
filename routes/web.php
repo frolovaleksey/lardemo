@@ -4,6 +4,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\AuthorController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -14,7 +15,8 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/books', [BookController::class, 'index'])->name('books.index');
+Route::resource('book',   BookController::class);
+Route::resource('author', AuthorController::class);
 
 Route::middleware([
     'auth:sanctum',

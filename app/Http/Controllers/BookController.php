@@ -27,6 +27,11 @@ class BookController extends Controller
         return Inertia::render('Book/Index', [
             'books' => $books,
             'filters' => $request->only(['id', 'title']),
+            'translations' => [
+                'filter_id' => __('Filter by ID'),
+                'filter_title' => __('Filter by Title'),
+                'book_list' => __('Book list')
+            ],
         ]);
     }
 }
