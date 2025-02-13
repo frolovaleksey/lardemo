@@ -50,6 +50,10 @@ function deleteAuthor() {
         });
     }
 }
+
+function editAuthor(author) {
+    router.get(route('author.edit', author.id));  // Переход на страницу редактирования
+}
 </script>
 
 <template>
@@ -91,9 +95,14 @@ function deleteAuthor() {
                         <span class="text-lg font-semibold text-gray-700">#{{ author.id }}</span>
                         <span class="text-gray-800">{{ author.first_name }}</span>
                         <span class="text-gray-800">{{ author.last_name }}</span>
-                        <button @click="confirmDelete(author)" class="text-red-600 hover:text-red-800">
-                            Delete
-                        </button>
+                        <div class="flex gap-4" v-if="canAddAuthor">
+                            <button @click="editAuthor(author)" class="text-blue-600 hover:text-blue-800">
+                                Edit
+                            </button>
+                            <button @click="confirmDelete(author)" class="text-red-600 hover:text-red-800">
+                                Delete
+                            </button>
+                        </div>
                     </li>
                 </ul>
             </div>

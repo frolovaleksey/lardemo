@@ -37,10 +37,20 @@ class InstallDemoData extends Command
     {
         echo "\n";
 
-        $role = Role::create(['name' => 'admin']);
+        $role = Role::findOrCreate('admin');
 
-        $role->givePermissionTo( Permission::create(['name' => 'Http_Controller_AuthorController_create']) );
-        $role->givePermissionTo( Permission::create(['name' => 'Http_Controller_AuthorController_store']) );
+        $permissions = [
+            'Http_Controller_AuthorController_create',
+            'Http_Controller_AuthorController_store',
+            'Http_Controller_AuthorController_edit',
+            'Http_Controller_AuthorController_update',
+            'Http_Controller_AuthorController_destroy',
+        ];
+
+        foreach ($permissions as $permissionName){
+            $permission = Permission::findOrCreate($permissionName);
+            $role->givePermissionTo( $permission );
+        }
 
         echo "Roles And Permissions created\n";
     }
@@ -49,13 +59,16 @@ class InstallDemoData extends Command
     {
         echo "\n";
 
-        $user = new User();
-        $user->name = 'Admin';
-        $user->email = 'test@test.ts';
-        $user->password = Hash::make('AdminAdmin');
-        $user->save();
+        $user = User::where('email', 'test@test.ts')->first();
+        if( $user === null ){
+            $user = new User();
+            $user->name = 'Admin';
+            $user->email = 'test@test.ts';
+            $user->password = Hash::make('AdminAdmin');
+            $user->save();
 
-        $user->assignRole('admin');
+            $user->assignRole('admin');
+        }
 
         echo "Users created\n";
     }

@@ -10,4 +10,11 @@ trait PermissionHelperTrait
     {
         return (Auth::user() && Auth::user()->can($permission));
     }
+
+    public function abortNotCan(string $permission)
+    {
+        if( !$this->userCan($permission) ){
+            abort(403);
+        }
+    }
 }
