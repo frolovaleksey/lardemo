@@ -25,11 +25,11 @@ const id = ref(props.filters.id || '');
 const title = ref(props.filters.title || '');
 
 watch(title, (value) => {
-    router.get('/books', { id: id.value, title: value }, { preserveState: true, replace: true });
+    router.get('/book', { id: id.value, title: value }, { preserveState: true, replace: true });
 });
 
 watch(id, (value) => {
-    router.get('/books', { id: value, title: title.value }, { preserveState: true, replace: true });
+    router.get('/book', { id: value, title: title.value }, { preserveState: true, replace: true });
 });
 </script>
 

@@ -20,17 +20,36 @@ const props = defineProps({
 
 const page = usePage();
 const successMessage = ref(page.props.flash?.success || '');
-console.log(page.props.flash.success);
-const id = ref(props.filters.id || '');
-const title = ref(props.filters.title || '');
 
-watch(title, (value) => {
-    router.get('/authors', { id: id.value, title: value }, { preserveState: true, replace: true });
+const first_name = ref(props.filters.first_name || '');
+const last_name = ref(props.filters.last_name || '');
+
+const showModal = ref(false);
+const authorToDelete = ref(null);
+
+watch(first_name, (value) => {
+    router.get('/author', { first_name: value, last_name: last_name.value }, { preserveState: true, replace: true });
 });
 
-watch(id, (value) => {
-    router.get('/authors', { id: value, title: title.value }, { preserveState: true, replace: true });
+watch(last_name, (value) => {
+    router.get('/author', { first_name: first_name.value, last_name: value }, { preserveState: true, replace: true });
 });
+
+function confirmDelete(author) {
+    authorToDelete.value = author;
+    showModal.value = true;
+}
+
+function deleteAuthor() {
+    if (authorToDelete.value) {
+        router.delete(route('author.destroy', authorToDelete.value.id), {
+            onSuccess: () => {
+                showModal.value = false;
+                successMessage.value = "Author deleted successfully!";
+            },
+        });
+    }
+}
 </script>
 
 <template>
@@ -52,13 +71,13 @@ watch(id, (value) => {
 
             <div class="mb-6 flex flex-col md:flex-row gap-4">
                 <input
-                    v-model="id"
+                    v-model="first_name"
                     type="text"
                     :placeholder="props.translations.first_name"
                     class="w-full md:w-1/2 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <input
-                    v-model="title"
+                    v-model="last_name"
                     type="text"
                     :placeholder="props.translations.last_name"
                     class="w-full md:w-1/2 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -72,8 +91,24 @@ watch(id, (value) => {
                         <span class="text-lg font-semibold text-gray-700">#{{ author.id }}</span>
                         <span class="text-gray-800">{{ author.first_name }}</span>
                         <span class="text-gray-800">{{ author.last_name }}</span>
+                        <button @click="confirmDelete(author)" class="text-red-600 hover:text-red-800">
+                            Delete
+                        </button>
                     </li>
                 </ul>
+            </div>
+
+            <!-- Modal for confirmation -->
+            <div v-if="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
+                    <h2 class="text-lg font-semibold mb-4">Are you sure you want to delete this author?</h2>
+                    <div class="flex justify-end gap-4">
+                        <button @click="showModal = false" class="px-4 py-2 bg-gray-300 rounded">Cancel</button>
+                        <button @click="deleteAuthor" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
+                            Delete
+                        </button>
+                    </div>
+                </div>
             </div>
 
             <div class="mt-6 flex justify-between">

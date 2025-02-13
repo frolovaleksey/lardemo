@@ -51,7 +51,13 @@ class AuthorController extends Controller
         Author::create($request->validated());
 
         return redirect()->route('author.index')->with('success', __('Author created successfully!'));
-        //return Inertia::location(route('author.index'))->with('success', __('Author created successfully!'));
-        //return redirect()->route('author.index')->with('flash', ['success' => __('Author created successfully!')]);
+    }
+
+    public function destroy($id)
+    {
+        $author = Author::findOrFail($id);
+        $author->delete();
+
+        return redirect()->route('author.index')->with('success', __('Author deleted successfully!'));
     }
 }
