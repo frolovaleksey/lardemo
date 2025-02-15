@@ -6,9 +6,7 @@ use App\Http\Controllers\BookController;
 use App\Http\Controllers\AuthorController;
 
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
-
-    ]);
+    return Inertia::render('Welcome');
 });
 
 Route::resource('book',   BookController::class);

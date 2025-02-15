@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreAuthorRequest;
-use App\Models\Author;
 use App\Services\Author\AuthorRepository;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
@@ -22,7 +21,7 @@ class AuthorController extends Controller
 
         $authors = $this->authorRepository
             ->setPagination(5)
-            ->getFilteredItems($filters);
+            ->getFilteredPaginateItems($filters);
 
         return Inertia::render('Author/Index', [
             'authors' => $authors,
@@ -48,28 +47,28 @@ class AuthorController extends Controller
     {
         $this->abortNotCan('Http_Controller_AuthorController_store');
 
-        Author::create($request->validated());
+        $this->authorRepository->create($request->validated());
 
         return redirect()->route('author.index')->with('success', __('Author created successfully!'));
     }
 
-    public function edit(Author $author)
+    public function edit($id)
     {
         $this->abortNotCan('Http_Controller_AuthorController_edit');
 
         return Inertia('Author/Edit', [
-            'author' => $author,
+            'author' => $this->authorRepository->findById($id),
             'translations' => [
                 'edit_author' => 'Edit Author',
             ],
         ]);
     }
 
-    public function update(StoreAuthorRequest $request, Author $author)
+    public function update(StoreAuthorRequest $request, $id)
     {
         $this->abortNotCan('Http_Controller_AuthorController_update');
 
-        $author->update($request->all());
+        $this->authorRepository->update($id, $request->all());
 
         return redirect()->route('author.index')->with('success', 'Author updated successfully!');
     }
@@ -78,8 +77,7 @@ class AuthorController extends Controller
     {
         $this->abortNotCan('Http_Controller_AuthorController_destroy');
 
-        $author = Author::findOrFail($id);
-        $author->delete();
+        $this->authorRepository->delete($id);
 
         return redirect()->route('author.index')->with('success', __('Author deleted successfully!'));
     }

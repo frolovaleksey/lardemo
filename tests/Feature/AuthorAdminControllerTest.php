@@ -19,7 +19,9 @@ class AuthorAdminControllerTest extends TestCase
     {
         parent::setUp();
 
-        (new InstallDemoData())->handle();
+        $demoInstaller = new InstallDemoData();
+        $demoInstaller->createRolesAndPermissions();
+        $demoInstaller->createAdminUser();
 
         $this->actingAs( User::where('email', 'test@test.ts')->first() );
     }

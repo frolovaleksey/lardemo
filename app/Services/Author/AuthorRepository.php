@@ -3,19 +3,8 @@
 namespace App\Services\Author;
 
 use App\Models\Author;
-use App\Services\Repository\Repository;
-use Illuminate\Database\Eloquent\Builder;
 
-class AuthorRepository extends Repository
+interface AuthorRepository
 {
-    protected array $whereLike = [
-        'first_name',
-        'last_name'
-    ];
-
-    protected function baseQuery(): Builder
-    {
-        return Author::query();
-    }
-
+    public function findByFirstLastName(string $firstName, string $lastName): ?Author;
 }
