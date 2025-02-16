@@ -3,10 +3,17 @@
 namespace App\Observers;
 
 use App\Models\Book;
-use Illuminate\Support\Facades\Storage;
+use App\Services\File\BookFile;
 
 class BookObserver
 {
+    protected BookFile $fileHandler;
+
+    public function __construct(BookFile $fileHandler)
+    {
+        $this->fileHandler = $fileHandler;
+    }
+
     /**
      * Handle the Book "created" event.
      */
@@ -25,7 +32,7 @@ class BookObserver
 
     public function deleting(Book $book)
     {
-        Storage::disk('public')->delete(str_replace('storage/', '', $book->image_url));
+        $this->fileHandler::delete($book);
         $book->authors()->detach();
     }
 

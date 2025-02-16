@@ -1,7 +1,6 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
 import AuthorForm from "@/Pages/Author/AuthorForm.vue";
-import {useForm} from '@inertiajs/vue3';
 
 const props = defineProps({
     author: Object

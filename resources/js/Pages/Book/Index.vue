@@ -43,6 +43,10 @@ function deleteBook() {
     }
 }
 
+function editBook(book) {
+    router.get(route('book.edit', book.id));
+}
+
 </script>
 
 <template>
@@ -74,8 +78,10 @@ function deleteBook() {
                     <p class="text-gray-500 text-sm">{{ props.translations.authors }}: {{ book.authors.map(a => a.first_name+' '+a.last_name).join(', ') }}</p>
                     <div class="mt-4 flex gap-2">
                         <button class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">{{ props.translations.buy }}</button>
-                        <Link :href="route('book.edit', book.id)" class="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600">{{ props.translations.edit }}</Link>
 
+                        <button @click="editBook(book)" class="text-blue-600 hover:text-blue-800">
+                            Edit
+                        </button>
                         <button @click="confirmDelete(book)" class="text-red-600 hover:text-red-800">
                             Delete
                         </button>

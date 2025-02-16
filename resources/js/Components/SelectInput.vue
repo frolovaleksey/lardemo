@@ -1,7 +1,7 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 
-defineProps({
+const props = defineProps({
     modelValue: Array,
     options: Array,
     multiple: Boolean
@@ -27,7 +27,12 @@ defineExpose({ focus: () => select.value.focus() });
         :multiple="multiple"
         @change="$emit('update:modelValue', Array.from($event.target.selectedOptions, option => option.value))"
     >
-        <option v-for="option in options" :key="option.value" :value="option.value">
+        <option
+            v-for="option in options"
+            :key="option.value"
+            :value="option.value"
+            :selected="modelValue.includes(option.value)"
+        >
             {{ option.label }}
         </option>
     </select>

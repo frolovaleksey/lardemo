@@ -3,14 +3,13 @@
 namespace App\Services\Book;
 
 use App\Models\Book;
+use App\Services\File\BookFile;
 use App\Services\Repository\Repository;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
 
 class BookRepositoryHandler extends Repository implements BookRepository
 {
-
     protected array $whereLike = [
         'title'
     ];
@@ -33,8 +32,8 @@ class BookRepositoryHandler extends Repository implements BookRepository
     public function create(array $data): Model
     {
         if (isset($data['image'])) {
-            $path = $data['image']->store('book_images', 'public');
-            $data['image_url'] = Storage::url($path);
+            $file = app(BookFile::class);
+            $data['image_url'] = $file::storeUploadedFile($data['image']);
         }
 
         $model = parent::create($data);
@@ -42,5 +41,24 @@ class BookRepositoryHandler extends Repository implements BookRepository
         $model->authors()->sync($data['authors']);
 
         return $model;
+    }
+
+    public function update(int|Model $id, array $data): ?Model
+    {
+        if (isset($data['image'])) {
+            $file = app(BookFile::class);
+            $data['image_url'] = $file::refreshUploadedFile($this->getModelInstance($id), $data['image']);
+        }
+
+        $model = parent::update($id, $data);
+
+        $model->authors()->sync($data['authors']);
+
+        return $model;
+    }
+
+    public function findById(int $id): ?Model
+    {
+        return $this->model::where('id', $id)->with('authors')->first();
     }
 }

@@ -38,6 +38,8 @@ class BookController extends Controller
                 'add_book' => __('Add Book'),
                 'price' => __('Price'),
                 'authors' => __('Authors'),
+                'edit' => __('Edit'),
+                'buy' => __('Add to Cart'),
             ],
         ]);
     }
@@ -57,6 +59,30 @@ class BookController extends Controller
         $this->bookRepository->create($request->validated());
 
         return redirect()->route('book.index')->with('success', __('Book created successfully!'));
+    }
+
+
+    public function edit($id)
+    {
+        $this->abortNotCan('Http_Controller_BookController_edit');
+
+        return Inertia('Book/Edit', [
+            'book' => $this->bookRepository->findById($id),
+            'authorOptions' => $this->authorSelectOptionsHelper::all(),
+            'translations' => [
+                'edit_author' => 'Edit Book',
+            ],
+        ]);
+    }
+
+    public function update(StoreBookRequest $request, $id)
+    {
+        dd($request);
+        $this->abortNotCan('Http_Controller_BookController_update');
+
+        $this->bookRepository->update($id, $request->all());
+
+        return redirect()->route('book.index')->with('success', 'Book updated successfully!');
     }
 
     public function destroy($id)

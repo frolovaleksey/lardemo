@@ -52,7 +52,7 @@ function deleteAuthor() {
 }
 
 function editAuthor(author) {
-    router.get(route('author.edit', author.id));  // Переход на страницу редактирования
+    router.get(route('author.edit', author.id));
 }
 </script>
 

@@ -2,6 +2,7 @@
 
 namespace App\Services\Repository;
 
+use App\Services\File\FileHandler;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
