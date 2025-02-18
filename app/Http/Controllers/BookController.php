@@ -6,6 +6,7 @@ use App\Http\Requests\StoreBookRequest;
 use App\Services\Author\AuthorSelectOptionsHelper;
 use App\Services\Book\BookRepository;
 use App\Services\Book\BookRepositoryWithAuthorHandler;
+use App\Services\Cart\Cart;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -19,7 +20,7 @@ class BookController extends Controller
         $this->bookRepository = $bookRepository;
         $this->authorSelectOptionsHelper = $authorSelectOptionsHelper;
     }
-    public function index(Request $request)
+    public function index(Request $request, Cart $cart)
     {
         $filters = $request->only(['id', 'title', 'last_name']);
 
@@ -31,6 +32,9 @@ class BookController extends Controller
             'items' => $items,
             'filters' => $filters,
             'canAddBook' => $this->userCan('Http_Controller_BookController_create'),
+            'canEditBook' => $this->userCan('Http_Controller_BookController_edit'),
+            'canDeleteBook' => $this->userCan('Http_Controller_BookController_destroy'),
+            'cartCount' => $cart->getItemsCount(),
             'translations' => [
                 'filter_id' => __('Filter by ID'),
                 'filter_title' => __('Filter by Title'),
@@ -40,7 +44,8 @@ class BookController extends Controller
                 'price' => __('Price'),
                 'authors' => __('Authors'),
                 'edit' => __('Edit'),
-                'buy' => __('Add to Cart'),
+                'add_to_cart' => __('Add to Cart'),
+                'cart' => __('Open Cart'),
             ],
         ]);
     }

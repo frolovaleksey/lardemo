@@ -7,13 +7,17 @@ import PaginationSimple from "@/Components/PaginationSimple.vue";
 
 const props = defineProps({
     canAddBook: Boolean,
+    canEditBook: Boolean,
+    canDeleteBook: Boolean,
     items: Object,
     filters: Object,
     translations: Object,
+    cartCount: Number,
 });
 
 const page = usePage();
 const successMessage = ref(page.props.flash?.success || '');
+const cartCount = ref(props.cartCount || 0);
 
 const id = ref(props.filters.id || '');
 const title = ref(props.filters.title || '');
@@ -39,21 +43,19 @@ function confirmDelete(book) {
     showModal.value = true;
 }
 
-function deleteBook() {
-    if (bookToDelete.value) {
-        router.delete(route('book.destroy', bookToDelete.value.id), {
-            onSuccess: () => {
-                showModal.value = false;
-                successMessage.value = "Book deleted successfully!";
-            },
-        });
-    }
-}
+
 
 function editBook(book) {
     router.get(route('book.edit', book.id));
 }
 
+function addToCart(book) {
+    router.post(route('cart.addItem'), { id: book.id }, {
+        onSuccess: (response) => {
+            cartCount.value = response.props.cartCount;
+        }
+    });
+}
 </script>
 
 <template>
@@ -62,6 +64,10 @@ function editBook(book) {
             <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">{{ props.translations.book_list }}</h1>
 
             <SuccessMessage></SuccessMessage>
+
+            <div class="flex justify-between mb-4">
+                <a :href="route('checkout')" class="text-lg font-semibold">{{ props.translations.cart }}: {{ cartCount }}</a>
+            </div>
 
             <div class="mb-6 flex flex-col md:flex-row gap-4" v-if="canAddBook">
                 <a :href="route('book.create')"
@@ -77,38 +83,27 @@ function editBook(book) {
             </div>
 
             <div class="mb-6 flex flex-col md:flex-row gap-4">
-                <span>Items total count:{{props.items.total}}</span>
+                <span>Items total count: {{ props.items.total }}</span>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-
                 <div v-for="book in items.data" :key="book.id" class="bg-gray-100 p-4 rounded-lg shadow-lg">
                     <img :src="book.image_url" alt="Book Cover" class="w-full h-48 object-cover rounded-md mb-4">
                     <h3 class="text-lg font-bold text-gray-800">{{ book.title }}</h3>
                     <p class="text-gray-600">{{ props.translations.price }}: {{ book.price }} Kč</p>
                     <p class="text-gray-500 text-sm">{{ props.translations.authors }}: {{ book.authors.map(a => a.first_name+' '+a.last_name).join(', ') }}</p>
                     <div class="mt-4 flex gap-2">
-                        <button class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">{{ props.translations.buy }}</button>
+                        <button @click="addToCart(book)" class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600">
+                            {{ props.translations.add_to_cart }}
+                        </button>
 
-                        <button @click="editBook(book)" class="text-blue-600 hover:text-blue-800">
+                        <button v-if="canEditBook" @click="editBook(book)" class="text-blue-600 hover:text-blue-800">
                             Edit
                         </button>
-                        <button @click="confirmDelete(book)" class="text-red-600 hover:text-red-800">
+
+                        <button v-if="canDeleteBook"  @click="confirmDelete(book)" class="text-red-600 hover:text-red-800">
                             Delete
                         </button>
-                    </div>
-
-                    <!-- Modal for confirmation -->
-                    <div v-if="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                        <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
-                            <h2 class="text-lg font-semibold mb-4">Are you sure you want to delete this book?</h2>
-                            <div class="flex justify-end gap-4">
-                                <button @click="showModal = false" class="px-4 py-2 bg-gray-300 rounded">Cancel</button>
-                                <button @click="deleteBook" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
-                                    Delete
-                                </button>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>

@@ -22,7 +22,7 @@ return [
     |
     | Here you may configure the connection options for every queue backend
     | used by your application. An example configuration is provided for
-    | each backend supported by Laravel. You're also free to add more.
+    | each backend supported by Laravel. You're also free to addItem more.
     |
     | Drivers: "sync", "database", "beanstalkd", "sqs", "redis", "null"
     |

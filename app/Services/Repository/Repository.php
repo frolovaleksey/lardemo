@@ -12,11 +12,14 @@ abstract class Repository
     protected array $whereStrict=[];
     protected int $pagination=10;
 
-    protected string $model;
+    protected ?string $model=null;
 
     public function __construct()
     {
         $this->initModel();
+        if (!is_subclass_of($this->model, Model::class)) {
+            throw new \LogicException("The \$model property must be a class that inherits Model.");
+        }
     }
 
     abstract protected function initModel(): void;
@@ -65,9 +68,14 @@ abstract class Repository
         return $item ? $this->saveModel($item, $data) : null;
     }
 
-    public function delete(int|Model $id)
+    public function delete(int|Model $id): bool
     {
-        return $this->getModelInstance($id)?->delete();
+        $item = $this->getModelInstance($id);
+        if($item){
+            $item->delete();
+            return true;
+        }
+        return false;
     }
 
     protected function getPagination(): int
