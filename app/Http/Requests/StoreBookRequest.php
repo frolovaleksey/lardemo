@@ -13,7 +13,6 @@ class StoreBookRequest extends FormRequest
 
     public function rules()
     {
-        return [];
         return [
             'title' => 'required|string',
             'price' => 'required|integer',

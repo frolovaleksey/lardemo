@@ -19,12 +19,12 @@ class AuthorController extends Controller
     {
         $filters = $request->only(['first_name', 'last_name']);
 
-        $authors = $this->authorRepository
-            ->setPagination(5)
+        $items = $this->authorRepository
+            ->setPagination(2)
             ->getFilteredPaginateItems($filters);
 
         return Inertia::render('Author/Index', [
-            'authors' => $authors,
+            'items' => $items,
             'filters' => $filters,
             'canAddAuthor' => $this->userCan('Http_Controller_AuthorController_create'),
             'translations' => [

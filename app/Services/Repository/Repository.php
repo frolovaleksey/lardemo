@@ -2,7 +2,6 @@
 
 namespace App\Services\Repository;
 
-use App\Services\File\FileHandler;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -119,10 +118,16 @@ abstract class Repository
         return $query;
     }
 
+    public function getFilteredItems(array $filters): Builder
+    {
+        return $this->addFilters($this->baseQuery(), $filters);
+    }
+
     public function getFilteredPaginateItems(array $filters): LengthAwarePaginator
     {
-        return $this->addFilters($this->baseQuery(), $filters)
+        return $this->getFilteredItems($filters)
             ->paginate($this->getPagination())
-            ->withQueryString();
+            ->withQueryString()
+            ;
     }
 }

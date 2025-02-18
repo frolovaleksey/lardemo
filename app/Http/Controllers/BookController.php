@@ -3,37 +3,38 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreBookRequest;
-use App\Models\Book;
 use App\Services\Author\AuthorSelectOptionsHelper;
 use App\Services\Book\BookRepository;
+use App\Services\Book\BookRepositoryWithAuthorHandler;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use Illuminate\Support\Facades\Storage;
+
 
 class BookController extends Controller
 {
     protected BookRepository $bookRepository;
     protected AuthorSelectOptionsHelper $authorSelectOptionsHelper;
-    public function __construct(BookRepository $bookRepository, AuthorSelectOptionsHelper $authorSelectOptionsHelper)
+    public function __construct(BookRepositoryWithAuthorHandler $bookRepository, AuthorSelectOptionsHelper $authorSelectOptionsHelper)
     {
         $this->bookRepository = $bookRepository;
         $this->authorSelectOptionsHelper = $authorSelectOptionsHelper;
     }
     public function index(Request $request)
     {
-        $filters = $request->only(['id', 'title']);
+        $filters = $request->only(['id', 'title', 'last_name']);
 
-        $books = $this->bookRepository
-            ->setPagination(5)
+        $items = $this->bookRepository
+            ->setPagination(4)
             ->getFilteredPaginateItems($filters);
 
         return Inertia::render('Book/Index', [
-            'books' => $books,
+            'items' => $items,
             'filters' => $filters,
             'canAddBook' => $this->userCan('Http_Controller_BookController_create'),
             'translations' => [
                 'filter_id' => __('Filter by ID'),
                 'filter_title' => __('Filter by Title'),
+                'filter_last_name' => __('Filter by Author Last Name'),
                 'book_list' => __('Book list'),
                 'add_book' => __('Add Book'),
                 'price' => __('Price'),
@@ -66,7 +67,7 @@ class BookController extends Controller
     {
         $this->abortNotCan('Http_Controller_BookController_edit');
 
-        return Inertia('Book/Edit', [
+        return Inertia::render('Book/Edit', [
             'book' => $this->bookRepository->findById($id),
             'authorOptions' => $this->authorSelectOptionsHelper::all(),
             'translations' => [
@@ -77,10 +78,9 @@ class BookController extends Controller
 
     public function update(StoreBookRequest $request, $id)
     {
-        dd($request);
         $this->abortNotCan('Http_Controller_BookController_update');
 
-        $this->bookRepository->update($id, $request->all());
+        $this->bookRepository->update($id, $request->validated());
 
         return redirect()->route('book.index')->with('success', 'Book updated successfully!');
     }

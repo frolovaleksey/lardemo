@@ -23,8 +23,9 @@ const form = useForm({
 
 
 const updateBook = (form) => {
-    form.put(route('book.update', props.book.id));
+    form.post(route('book.update_post', props.book.id));
 };
+
 </script>
 
 <template>

@@ -39,6 +39,7 @@ watch(() => props.book, (newBook) => {
 const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
+        console.log(file);
         form.image = file;
         const reader = new FileReader();
         reader.onload = (e) => {

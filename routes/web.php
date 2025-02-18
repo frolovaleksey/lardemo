@@ -9,7 +9,11 @@ Route::get('/', function () {
     return Inertia::render('Welcome');
 });
 
+
 Route::resource('book',   BookController::class);
+Route::post('book/update/{id}', [BookController::class, 'update'])->name('book.update_post');
+
+
 Route::resource('author', AuthorController::class);
 
 Route::middleware([

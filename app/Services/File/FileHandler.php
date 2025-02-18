@@ -15,8 +15,11 @@ class FileHandler implements File
     {
         return Storage::url( $data->store($folder, static::getDisk()) );
     }
-    public static function delete(string $filePath): bool
+    public static function delete(?string $filePath): bool
     {
-        return Storage::disk(static::getDisk())->delete(str_replace('storage/', '', $filePath));
+        if($filePath){
+            return Storage::disk(static::getDisk())->delete(str_replace('storage/', '', $filePath));
+        }
+        return false;
     }
 }

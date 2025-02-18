@@ -21,7 +21,6 @@ const form = useForm({
 });
 
 
-
 const createBook = (form) => {
     form.post(route('book.store'));
 };

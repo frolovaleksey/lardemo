@@ -2,12 +2,14 @@
 import { ref, watch } from 'vue';
 import { usePage, router, Link } from '@inertiajs/vue3';
 import AppLayout from "@/Layouts/AppLayout.vue";
+import SuccessMessage from "@/Components/SuccessMessage.vue";
+import PaginationSimple from "@/Components/PaginationSimple.vue";
 
 const props = defineProps({
     canAddAuthor: {
         type: Boolean,
     },
-    authors: {
+    items: {
         type: Object,
     },
     filters: {
@@ -61,9 +63,7 @@ function editAuthor(author) {
         <div class="max-w-3xl mx-auto p-6 bg-white shadow-lg rounded-lg mt-6">
             <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">{{ props.translations.title }}</h1>
 
-            <div v-if="successMessage" class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
-                {{ successMessage }}
-            </div>
+            <SuccessMessage></SuccessMessage>
 
             <div class="mb-6 flex flex-col md:flex-row gap-4" v-if="canAddAuthor">
                 <a
@@ -88,9 +88,13 @@ function editAuthor(author) {
                 />
             </div>
 
+            <div class="mb-6 flex flex-col md:flex-row gap-4">
+                <span>Items total count:{{props.items.total}}</span>
+            </div>
+
             <div class="bg-gray-50 p-4 rounded-lg shadow-md">
                 <ul>
-                    <li v-for="author in authors.data" :key="author.id"
+                    <li v-for="author in items.data" :key="author.id"
                         class="p-3 border-b last:border-b-0 flex justify-between items-center hover:bg-gray-100 transition">
                         <span class="text-lg font-semibold text-gray-700">#{{ author.id }}</span>
                         <span class="text-gray-800">{{ author.first_name }}</span>
@@ -120,23 +124,7 @@ function editAuthor(author) {
                 </div>
             </div>
 
-            <div class="mt-6 flex justify-between">
-                <button
-                    v-if="authors.prev_page_url"
-                    @click="router.get(authors.prev_page_url)"
-                    class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
-                >
-                    Prev
-                </button>
-
-                <button
-                    v-if="authors.next_page_url"
-                    @click="router.get(authors.next_page_url)"
-                    class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
-                >
-                    Next
-                </button>
-            </div>
+            <PaginationSimple :items="props.items"></PaginationSimple>
         </div>
     </AppLayout>
 </template>
