@@ -25,6 +25,6 @@ class SendNotificationsToAuthors extends Command
      */
     public function handle()
     {
-        dd('f');
+
     }
 }

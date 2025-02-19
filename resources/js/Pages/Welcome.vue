@@ -45,13 +45,12 @@ function handleImageError() {
                             Welcome to Laravel demo application!
                         </h1>
 
-                        <p class="mt-6 text-gray-500 leading-relaxed">
-                            <ul>
-                                <li>
-                                    Lorem
-                                </li>
-                            </ul>
-                        </p>
+
+                        <ul class="mt-6 text-gray-500 leading-relaxed">
+                            <li>
+                                Lorem
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
