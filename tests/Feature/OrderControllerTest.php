@@ -2,13 +2,13 @@
 
 namespace Tests\Feature;
 
+use App\Models\User;
 use App\Services\Cart\Cart;
 use App\Services\Order\OrderRepository;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Inertia\Testing\AssertableInertia as Assert;
 use Mockery;
 use Tests\TestCase;
-use App\Models\User;
-use Inertia\Testing\AssertableInertia as Assert;
 
 /*
  * php artisan test --filter OrderControllerTest
@@ -19,6 +19,7 @@ class OrderControllerTest extends TestCase
     use RefreshDatabase;
 
     protected $cartMock;
+
     protected $orderRepositoryMock;
 
     protected function setUp(): void

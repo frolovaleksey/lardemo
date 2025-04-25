@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Feature;
 
 use App\Console\Commands\InstallDemoData;
@@ -19,11 +20,11 @@ class BookAdminControllerTest extends TestCase
     {
         parent::setUp();
 
-        $demoInstaller = new InstallDemoData();
+        $demoInstaller = new InstallDemoData;
         $demoInstaller->createRolesAndPermissions();
         $demoInstaller->createAdminUser();
 
-        $this->actingAs( User::where('email', 'test@test.ts')->first() );
+        $this->actingAs(User::where('email', 'test@test.ts')->first());
     }
 
     public function test_user_can_view_books_list()
@@ -85,5 +86,4 @@ class BookAdminControllerTest extends TestCase
         $response->assertRedirect(route('book.index'));
         $this->assertDatabaseMissing('books', ['id' => $book->id]);
     }
-
 }

@@ -6,10 +6,10 @@ use App\Models\User;
 use App\Services\Author\AuthorRepository;
 use App\Services\Book\BookRepository;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Hash;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class InstallDemoData extends Command
 {
@@ -17,21 +17,14 @@ class InstallDemoData extends Command
      * The name and signature of the console command.
      *
      * php artisan app:install-demo-data
+     *
      * @var string
      */
     protected $signature = 'app:install-demo-data';
 
     /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Command description';
-
-    /**
      * Execute the console command.
      */
-
     public function handle()
     {
         echo "\n";
@@ -54,13 +47,13 @@ class InstallDemoData extends Command
         foreach ($tables as $table) {
             $tableName = reset($table);
             if ($tableName !== 'migrations') {
-                DB::statement("SET FOREIGN_KEY_CHECKS=0;");
+                DB::statement('SET FOREIGN_KEY_CHECKS=0;');
                 DB::table($tableName)->truncate();
-                DB::statement("SET FOREIGN_KEY_CHECKS=1;");
+                DB::statement('SET FOREIGN_KEY_CHECKS=1;');
             }
         }
 
-        echo "All tables except migrations are cleared!";
+        echo 'All tables except migrations are cleared!';
     }
 
     public function createRolesAndPermissions(): void
@@ -81,17 +74,17 @@ class InstallDemoData extends Command
             'Http_Controller_BookController_destroy',
         ];
 
-        foreach ($permissions as $permissionName){
+        foreach ($permissions as $permissionName) {
             $permission = Permission::findOrCreate($permissionName);
-            $role->givePermissionTo( $permission );
+            $role->givePermissionTo($permission);
         }
     }
 
     public function createAdminUser(): void
     {
         $user = User::where('email', 'test@test.ts')->first();
-        if( $user === null ){
-            $user = new User();
+        if ($user === null) {
+            $user = new User;
             $user->name = 'Admin';
             $user->email = 'test@test.ts';
             $user->password = Hash::make('AdminAdmin');
@@ -121,9 +114,9 @@ class InstallDemoData extends Command
         $authorRepository = app(AuthorRepository::class);
 
         $authorModels = [];
-        foreach ($authors as $authorData){
+        foreach ($authors as $authorData) {
             $authorModel = $authorRepository->findByFirstLastName($authorData['first_name'], $authorData['last_name']);
-            if($authorModel===null){
+            if ($authorModel === null) {
                 $authorModel = $authorRepository->create($authorData);
             }
             $authorModels[] = $authorModel;
@@ -133,46 +126,46 @@ class InstallDemoData extends Command
             [
                 'title' => 'The Colour of Magic',
                 'price' => 297,
-                'authors' => [$authorModels[0]->id]
+                'authors' => [$authorModels[0]->id],
             ],
             [
                 'title' => 'The Light Fantastic',
                 'price' => 320,
-                'authors' => [$authorModels[0]->id]
+                'authors' => [$authorModels[0]->id],
             ],
             [
                 'title' => 'Sourcery',
                 'price' => 269,
-                'authors' => [$authorModels[0]->id]
+                'authors' => [$authorModels[0]->id],
             ],
             [
                 'title' => 'Good Omens',
                 'price' => 229,
-                'authors' => [$authorModels[0]->id, $authorModels[1]->id]
+                'authors' => [$authorModels[0]->id, $authorModels[1]->id],
             ],
             [
                 'title' => 'American Gods',
                 'price' => 139,
-                'authors' => [$authorModels[1]->id]
+                'authors' => [$authorModels[1]->id],
             ],
             [
                 'title' => 'The Graveyard Book',
                 'price' => 229,
-                'authors' => [$authorModels[1]->id]
+                'authors' => [$authorModels[1]->id],
             ],
             [
                 'title' => 'I, Robot',
                 'price' => 204,
-                'authors' => [$authorModels[2]->id]
+                'authors' => [$authorModels[2]->id],
             ],
             [
                 'title' => 'Foundation',
                 'price' => 269,
-                'authors' => [$authorModels[2]->id]
+                'authors' => [$authorModels[2]->id],
             ],
         ];
         $bookRepository = app(BookRepository::class);
-        foreach ($books as $bookData){
+        foreach ($books as $bookData) {
             $bookRepository->create($bookData);
         }
     }

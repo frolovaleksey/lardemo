@@ -10,12 +10,14 @@ class BookFileHandler implements BookFile
     public static function delete(Book $book): bool
     {
         $file = app(File::class);
+
         return $file::delete($book->image_url);
     }
 
     public static function storeUploadedFile(UploadedFile $data): string
     {
         $file = app(File::class);
+
         return $file::storeUploadedFile($data, 'book_images');
     }
 
@@ -24,6 +26,7 @@ class BookFileHandler implements BookFile
         self::delete($book);
 
         $file = app(File::class);
+
         return $file::storeUploadedFile($data, 'book_images');
     }
 }

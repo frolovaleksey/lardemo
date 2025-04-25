@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Services\Cart\Cart;
 use App\Services\Cart\CartCheckoutDecorator;
 use Illuminate\Http\Request;

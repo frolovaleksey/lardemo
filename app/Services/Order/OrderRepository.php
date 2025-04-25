@@ -2,7 +2,4 @@
 
 namespace App\Services\Order;
 
-interface OrderRepository
-{
-
-}
+interface OrderRepository {}

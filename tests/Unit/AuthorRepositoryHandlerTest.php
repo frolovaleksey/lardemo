@@ -20,19 +20,19 @@ class AuthorRepositoryHandlerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->repository = new AuthorRepositoryHandler();
+        $this->repository = new AuthorRepositoryHandler;
     }
 
     public function test_it_can_create_an_author()
     {
         $author = $this->repository->create([
             'first_name' => 'John',
-            'last_name' => 'Doe'
+            'last_name' => 'Doe',
         ]);
 
         $this->assertDatabaseHas('authors', [
             'first_name' => 'John',
-            'last_name' => 'Doe'
+            'last_name' => 'Doe',
         ]);
         $this->assertInstanceOf(Author::class, $author);
     }
@@ -41,7 +41,7 @@ class AuthorRepositoryHandlerTest extends TestCase
     {
         Author::factory()->create([
             'first_name' => 'Jane',
-            'last_name' => 'Doe'
+            'last_name' => 'Doe',
         ]);
 
         $author = $this->repository->findByFirstLastName('Jane', 'Doe');
@@ -56,11 +56,11 @@ class AuthorRepositoryHandlerTest extends TestCase
     {
         $author = Author::factory()->create([
             'first_name' => 'Old',
-            'last_name' => 'Name'
+            'last_name' => 'Name',
         ]);
 
         $updated = $this->repository->update($author, [
-            'first_name' => 'New'
+            'first_name' => 'New',
         ]);
 
         $this->assertEquals('New', $updated->first_name);

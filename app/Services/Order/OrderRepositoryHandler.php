@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class OrderRepositoryHandler extends Repository implements OrderRepository
 {
-
     protected function initModel(): void
     {
         $this->model = Order::class;

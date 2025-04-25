@@ -4,8 +4,8 @@ namespace App\Providers;
 
 use App\Models\Book;
 use App\Observers\BookObserver;
-use App\Services\Author\AuthorRepositoryHandler;
 use App\Services\Author\AuthorRepository;
+use App\Services\Author\AuthorRepositoryHandler;
 use App\Services\Book\BookRepository;
 use App\Services\Book\BookRepositoryHandler;
 use App\Services\Cart\Cart;
@@ -18,7 +18,6 @@ use App\Services\Order\OrderItemsHandler;
 use App\Services\Order\OrderRepository;
 use App\Services\Order\OrderRepositoryHandler;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\View;
 
 class AppServiceProvider extends ServiceProvider
 {

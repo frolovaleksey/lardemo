@@ -6,18 +6,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-    protected $fillable=[
+    protected $fillable = [
         'date',
         'email',
         'comment',
     ];
 
-    protected $casts=[
-        'date' => 'date'
+    protected $casts = [
+        'date' => 'date',
     ];
 
     public function orderItems()
     {
-        return $this->hasMany( OrderItem::class );
+        return $this->hasMany(OrderItem::class);
     }
 }

@@ -8,17 +8,19 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 abstract class Repository
 {
-    protected array $whereLike=[];
-    protected array $whereStrict=[];
-    protected int $pagination=10;
+    protected array $whereLike = [];
 
-    protected ?string $model=null;
+    protected array $whereStrict = [];
+
+    protected int $pagination = 10;
+
+    protected ?string $model = null;
 
     public function __construct()
     {
         $this->initModel();
-        if (!is_subclass_of($this->model, Model::class)) {
-            throw new \LogicException("The \$model property must be a class that inherits Model.");
+        if (! is_subclass_of($this->model, Model::class)) {
+            throw new \LogicException('The $model property must be a class that inherits Model.');
         }
     }
 
@@ -26,7 +28,7 @@ abstract class Repository
 
     protected function baseQuery(): Builder
     {
-        return $this->setWith( $this->model::query() );
+        return $this->setWith($this->model::query());
     }
 
     protected function setWith(Builder $query): Builder
@@ -43,6 +45,7 @@ abstract class Repository
     {
         $model->fill($data);
         $model->save();
+
         return $model;
     }
 
@@ -58,23 +61,27 @@ abstract class Repository
 
     public function create(array $data): Model
     {
-        $item = new $this->model();
+        $item = new $this->model;
+
         return $this->saveModel($item, $data);
     }
 
     public function update(int|Model $id, array $data): ?Model
     {
         $item = $this->getModelInstance($id);
+
         return $item ? $this->saveModel($item, $data) : null;
     }
 
     public function delete(int|Model $id): bool
     {
         $item = $this->getModelInstance($id);
-        if($item){
+        if ($item) {
             $item->delete();
+
             return true;
         }
+
         return false;
     }
 
@@ -86,6 +93,7 @@ abstract class Repository
     public function setPagination(int $pagination): self
     {
         $this->pagination = $pagination;
+
         return $this;
     }
 
@@ -103,26 +111,29 @@ abstract class Repository
     {
         $query = $this->addWhereLikeFilter($query, $filters);
         $query = $this->addWhereStrictFilter($query, $filters);
+
         return $query;
     }
 
     protected function addWhereLikeFilter(Builder $query, array $filters): Builder
     {
-        foreach ($this->getWhereLike() as $option){
-            if (!empty($filters[$option])) {
-                $query->where($option, 'like', '%' . $filters[$option] . '%');
+        foreach ($this->getWhereLike() as $option) {
+            if (! empty($filters[$option])) {
+                $query->where($option, 'like', '%'.$filters[$option].'%');
             }
         }
+
         return $query;
     }
 
     protected function addWhereStrictFilter(Builder $query, array $filters): Builder
     {
-        foreach ($this->getWhereStrict() as $option){
-            if (!empty($filters[$option])) {
-                $query->where($option,  $filters[$option]);
+        foreach ($this->getWhereStrict() as $option) {
+            if (! empty($filters[$option])) {
+                $query->where($option, $filters[$option]);
             }
         }
+
         return $query;
     }
 
@@ -135,7 +146,6 @@ abstract class Repository
     {
         return $this->getFilteredItems($filters)
             ->paginate($this->getPagination())
-            ->withQueryString()
-            ;
+            ->withQueryString();
     }
 }

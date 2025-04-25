@@ -11,11 +11,11 @@ use Illuminate\Database\Eloquent\Model;
 class BookRepositoryHandler extends Repository implements BookRepository
 {
     protected array $whereLike = [
-        'title'
+        'title',
     ];
 
     protected array $whereStrict = [
-        'id'
+        'id',
     ];
 
     protected function initModel(): void
@@ -26,6 +26,7 @@ class BookRepositoryHandler extends Repository implements BookRepository
     protected function setWith(Builder $query): Builder
     {
         $query->with('authors');
+
         return $query;
     }
 

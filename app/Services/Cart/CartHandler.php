@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Session;
 
 class CartHandler implements Cart
 {
-    protected $sessionKey='cart';
+    protected $sessionKey = 'cart';
 
     protected function getKey(): string
     {
@@ -15,8 +15,9 @@ class CartHandler implements Cart
 
     public function isEmpty(): bool
     {
-        return (empty($this->getCart()));
+        return empty($this->getCart());
     }
+
     public function getCart(): array
     {
         return Session::get($this->getKey(), []);
@@ -24,14 +25,14 @@ class CartHandler implements Cart
 
     public function getItemsCount(): int
     {
-        return array_sum( $this->getCart() );
+        return array_sum($this->getCart());
     }
 
     public function addItem(int $id): void
     {
         $cart = $this->getCart();
 
-        if (!isset($cart[$id])) {
+        if (! isset($cart[$id])) {
             $cart[$id] = 1;
         } else {
             $cart[$id]++;

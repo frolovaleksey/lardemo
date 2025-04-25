@@ -14,17 +14,7 @@ class SendNotificationsToAuthors extends Command
     protected $signature = 'app:send-notifications-to-authors';
 
     /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Command description';
-
-    /**
      * Execute the console command.
      */
-    public function handle()
-    {
-
-    }
+    public function handle() {}
 }

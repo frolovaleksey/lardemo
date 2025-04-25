@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreAuthorRequest;
 use App\Services\Author\AuthorRepository;
-use Inertia\Inertia;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class AuthorController extends Controller
 {
@@ -15,6 +15,7 @@ class AuthorController extends Controller
     {
         $this->authorRepository = $authorRepository;
     }
+
     public function index(Request $request)
     {
         $filters = $request->only(['first_name', 'last_name']);
@@ -31,7 +32,7 @@ class AuthorController extends Controller
                 'filter_id' => __('ID'),
                 'first_name' => __('First name'),
                 'last_name' => __('Last Name'),
-                'title' => __('Author list')
+                'title' => __('Author list'),
             ],
         ]);
     }

@@ -2,7 +2,4 @@
 
 namespace App\Services\Book;
 
-interface BookRepository
-{
-
-}
+interface BookRepository {}

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreOrderRequest;
@@ -10,6 +11,7 @@ use Inertia\Inertia;
 class OrderController extends Controller
 {
     protected OrderRepository $orderRepository;
+
     protected Cart $cart;
 
     public function __construct(OrderRepositoryHandler $orderRepository, Cart $cart)
@@ -17,6 +19,7 @@ class OrderController extends Controller
         $this->orderRepository = $orderRepository;
         $this->cart = $cart;
     }
+
     public function create()
     {
         if ($this->cart->isEmpty()) {

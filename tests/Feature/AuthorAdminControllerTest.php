@@ -19,13 +19,12 @@ class AuthorAdminControllerTest extends TestCase
     {
         parent::setUp();
 
-        $demoInstaller = new InstallDemoData();
+        $demoInstaller = new InstallDemoData;
         $demoInstaller->createRolesAndPermissions();
         $demoInstaller->createAdminUser();
 
-        $this->actingAs( User::where('email', 'test@test.ts')->first() );
+        $this->actingAs(User::where('email', 'test@test.ts')->first());
     }
-
 
     public function test_index_displays_authors()
     {
@@ -84,5 +83,4 @@ class AuthorAdminControllerTest extends TestCase
         $this->assertDatabaseMissing('authors', ['id' => $author->id]);
         $response->assertRedirect(route('author.index'));
     }
-
 }

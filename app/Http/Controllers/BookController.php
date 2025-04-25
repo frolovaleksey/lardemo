@@ -10,16 +10,18 @@ use App\Services\Cart\Cart;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-
 class BookController extends Controller
 {
     protected BookRepository $bookRepository;
+
     protected AuthorSelectOptionsHelper $authorSelectOptionsHelper;
+
     public function __construct(BookRepositoryWithAuthorHandler $bookRepository, AuthorSelectOptionsHelper $authorSelectOptionsHelper)
     {
         $this->bookRepository = $bookRepository;
         $this->authorSelectOptionsHelper = $authorSelectOptionsHelper;
     }
+
     public function index(Request $request, Cart $cart)
     {
         $filters = $request->only(['id', 'title', 'last_name']);
@@ -53,6 +55,7 @@ class BookController extends Controller
     public function create()
     {
         $this->abortNotCan('Http_Controller_BookController_create');
+
         return Inertia::render('Book/Create', [
             'authorOptions' => $this->authorSelectOptionsHelper::all(),
         ]);
@@ -66,7 +69,6 @@ class BookController extends Controller
 
         return redirect()->route('book.index')->with('success', __('Book created successfully!'));
     }
-
 
     public function edit($id)
     {

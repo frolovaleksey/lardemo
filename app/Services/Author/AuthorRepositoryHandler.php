@@ -9,7 +9,7 @@ class AuthorRepositoryHandler extends Repository implements AuthorRepository
 {
     protected array $whereLike = [
         'first_name',
-        'last_name'
+        'last_name',
     ];
 
     protected function initModel(): void

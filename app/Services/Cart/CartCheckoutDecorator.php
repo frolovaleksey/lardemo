@@ -10,6 +10,7 @@ class CartCheckoutDecorator
     public static function decorate(Cart $cartHandler): Collection
     {
         $cart = $cartHandler->getCart();
+
         return Book::whereIn('id', array_keys($cart))->get()->map(function ($book) use ($cart) {
             return [
                 'id' => $book->id,

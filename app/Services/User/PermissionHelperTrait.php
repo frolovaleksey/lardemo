@@ -8,12 +8,12 @@ trait PermissionHelperTrait
 {
     public function userCan(string $permission): bool
     {
-        return (Auth::user() && Auth::user()->can($permission));
+        return Auth::user() && Auth::user()->can($permission);
     }
 
     public function abortNotCan(string $permission)
     {
-        if( !$this->userCan($permission) ){
+        if (! $this->userCan($permission)) {
             abort(403);
         }
     }
